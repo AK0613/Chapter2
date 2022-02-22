@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Chapter2
 {
@@ -81,58 +82,79 @@ namespace Chapter2
         #region Problems
         static void p1()
         {
+            int size = 7; 
+            Random random = new();
+            Console.Clear();
+            Console.WriteLine("Problem 1: Write code to remove duplicates from a Linked List\n" +
+                "For Linked List: ");
+
+            
+            LinkedList<int> ll = new LinkedList<int>();
+            /*Populate linkedlist with random numbers
+            for (int i = 0; i < size; i++)
+            {
+                ll.AddFirst(random.Next(1000));
+            }*/
+
+            ll.AddFirst(15);
+            ll.AddFirst(20);
+            ll.AddFirst(30);
+            ll.AddFirst(30);
+            ll.AddFirst(40);
+
+            displayLL(ll);
+
+            ll = DeleteDupes(ll);
+
+            displayLL(ll);
+
+
 
         }
-        #endregion
 
-        #region LinkedList Implementation
-
-        //Class node used for the linked list
-        class Node
+        static void displayLL(LinkedList<int> ll)
         {
-            internal Node? next = null;
-            internal Node? prev = null;
-            internal int data;
-
-            public Node()
+            var iterator = ll.First;
+            //Display linked list
+            while (iterator != null)
             {
-
+                Console.Write(iterator.Value + " ");
+                iterator = iterator.Next;
             }
-
-            public Node(int x)
-            {
-                data = x;
-            }
+            Console.WriteLine();
         }
-
-        //Class linkedList
-        class LinkedList
+        /// <summary>
+        /// Deletes the duplicate values in a linked list by iterating through the list and adding values to a hash table. If the value is 
+        /// repeated then the linkedlist node is deleted
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns>The linked list after deleting duplicates </returns>
+        static LinkedList<int> DeleteDupes(LinkedList<int> n)
         {
-            private Node? head;
-            private Node? tail;
-            private Node? current;
-            public int count;
+            //Hash table to hold individual values as keys
+            Hashtable ht = new();
+            //Iterator equals the first list node
+            var iterator = n.First;
 
-            public LinkedList()
+            //While whithin the list
+            while(iterator != null)
             {
-                 head = new Node();
-                 current = tail = head;
-            }
+                //If the hash table contains the same key as the iterator then remove it from the linked list and move to the next list item
+                if(ht.Contains(iterator.Value))
+                {
+                    n.Remove(iterator.Value);
+                    iterator = iterator.Next;
+                }
 
-            public void AddFirst(int x)
-            {
-                //If the head doesn't hold a value. Add a value to the head
-                if (head.prev == null)
-                    head.data = x;
+                //Else add the value for the iterator to the hash table and move to the next node
                 else
                 {
-                    Node? curr = new Node(x);
-                    tail = curr;
-                    current.next = head;
-                    head.prev = curr;
-
+                    ht.Add(iterator.Value, 1);
+                    iterator = iterator.Next;
                 }
             }
+
+            return n; 
         }
         #endregion
     }
