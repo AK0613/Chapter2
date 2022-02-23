@@ -293,9 +293,12 @@ namespace Chapter2
 
             while(iterator2 != null)
             {
-                left.AddFirst(iterator2.Value);
                 iterator2 = iterator2.Next;
+
+
             }
+
+            
 
             displayLL(left);
 
