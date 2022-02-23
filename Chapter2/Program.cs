@@ -21,13 +21,13 @@ namespace Chapter2
                     case 1:
                         p1();
                         break;
-                    /*case 2:
+                    case 2:
                         p2();
                         break;
                     case 3:
                         p3();
                         break;
-                    case 5:
+                    /*case 5:
                         p5();
                         break;
                     case 6:
@@ -61,6 +61,8 @@ namespace Chapter2
 
             Console.Clear();
             Console.WriteLine("Problem 1: Write code to remove duplicates from a Linked List\n" +
+                "Problem 2: Write a program that will find the kth element in a linked list\n" +
+                "Problem 3: Write a program to partition a linked list around a value X\n" +
                 "");
 
             do
@@ -156,6 +158,151 @@ namespace Chapter2
 
             return n; 
         }
+
+        static void p2()
+        {
+            string? input;
+            bool valid = false;
+            int listSize, k;
+            Random random = new Random();
+
+            Console.Clear();
+            Console.WriteLine("Problem 2: Write a program that will find the kth element in a linked list");
+
+            do
+            {
+                Console.Write("Enter a size for the linked list: ");
+                input = Console.ReadLine();
+
+                valid = int.TryParse(input, out listSize);
+                if (!valid)
+                    Console.WriteLine("Invalid input: Please enter an integer: ");
+                
+            }while(!valid);
+
+            LinkedList<int> ll = new LinkedList<int>();
+
+            //Populate the list with random items
+            for(int i = 0; i < listSize; i++)
+            {
+                ll.AddFirst(random.Next(1000));
+            }
+
+            displayLL(ll);
+
+            do
+            {
+                Console.Write("Enter a value for K: ");
+                input = Console.ReadLine();
+
+                valid = int.TryParse(input, out k);
+                if (k > listSize)
+                {
+                    valid = false;
+                    Console.WriteLine("Enter a value for k that is less than " + listSize);
+                }
+            } while (!valid);
+
+
+            FindKth(ll, k);
+
+        }
+
+        static void FindKth(LinkedList<int> ll, int k)
+        {
+            var iterator = ll.First;
+            int kthElement = 0, count = 1;
+
+            while(iterator != null)
+            {
+                if (count == k)
+                    kthElement = iterator.Value;
+                else
+                    iterator = iterator.Next;
+
+                count++;
+
+            }
+
+            Console.WriteLine("The kth element in the list is: " + kthElement);
+        }
+
+        static void p3()
+        {
+            string? input;
+            bool valid = false;
+            int x;
+
+            Random random = new Random();
+            Console.Clear();
+            Console.WriteLine("Problem 3: Write a program to partition a linked list around a value X");
+
+            LinkedList<int> ll = new();
+            LinkedList<int> llpartitioned = new();
+
+            for(int i = 0; i < 10 ; i++)
+            {
+                ll.AddLast(random.Next(100));
+            }
+
+            displayLL(ll);
+
+            do
+            {
+                Console.Write("Enter a value x to partition the list: ");
+                input = Console.ReadLine();
+                valid = int.TryParse(input, out x);
+
+                if (!ll.Contains(x))
+                {
+                    Console.WriteLine("Invalid input. Please enter a value that is in the list");
+                    valid = false;
+                }
+
+            } while (!valid && !ll.Contains(x));
+
+            Console.WriteLine("The newly partitioned list is: ");
+            llpartitioned = Partition(ll, x);
+
+            displayLL(llpartitioned);
+            
+        }
+
+        static LinkedList<int> Partition(LinkedList<int>ll, int x)
+        {
+            LinkedList<int> right = new();
+            LinkedList<int> left = new();
+
+            LinkedListNode<int> join;
+
+            var iterator = ll.First;
+
+            while(iterator != null)
+            {
+                if(iterator.Value >= x)
+                    right.AddFirst(iterator.Value);
+                else if(iterator.Value < x)
+                    left.AddFirst(iterator.Value);
+
+                iterator = iterator.Next;
+            }
+
+            displayLL(left);
+
+            var iterator2 = right.First;
+
+            while(iterator2 != null)
+            {
+                left.AddFirst(iterator2.Value);
+                iterator2 = iterator2.Next;
+            }
+
+            displayLL(left);
+
+
+            return left;
+        }
+
         #endregion
     }
 }
